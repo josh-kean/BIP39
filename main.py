@@ -1,22 +1,13 @@
 #this is an implementation of BIP 39
 #it takes in a set amount of words from the BIP 39 word list to create a 512 bit number
-import random as rand
 import hashlib as hsh
 
 word_list_length = 2048
-'''
-#have user type in a random string of characters to add entropy
-ent = input('type in a random number of strings')
-ent = bytes(ent, 'ascii')
-ent = ''.join(['{0:b}'.format(x) for x in ent])
-ent = hex(int(ent, base=2))
-print(ent)
-'''
 word_list = open('words.txt', 'r').readlines()
 word_list = [word[:-1] for word in word_list]
 
 def create_entropy():
-    ent = input('type whatever you want into the keyboard')
+    ent = input('type whatever you want into the keyboard: ')
     ent = hsh.sha256(ent.encode('utf-8')).hexdigest()
     ent = bin(int(ent, 16))
     return ent[2:]
