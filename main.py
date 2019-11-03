@@ -55,6 +55,7 @@ class Display(HashingFunctions):
         HashingFunctions.__init__(self)
         self.win1 = tk.Tk()
         self.win1.wm_title('Mnemonic Phrase Generator')
+        self.win1.resizable(width=False, height=False)
         self.mnemonicLabel = tk.Label(self.win1, text = 'Mnemonic Phrase')
         self.mnemonicBox = tk.Text(self.win1, height=5)
         self.keyLabel = tk.Label(self.win1, text = 'private_key')
@@ -66,21 +67,25 @@ class Display(HashingFunctions):
         entropy = self.create_entropy(str(ent))
         check_sum = self.check_sum(entropy)
         mnemonic = self.create_word_list(check_sum)
-        key = self.create_master_key(mnemonic)
+        mnemonic = ' '.join(mnemonic)
+        print(type(mnemonic))
         self.keyBox.delete('1.0', tk.END)
         self.mnemonicBox.delete('1.0', tk.END)
-        self.keyBox.insert('1.0', key)
         self.mnemonicBox.insert('1.0', mnemonic)
+        mnemonic = self.mnemonicBox.get('1.0', tk.END)
+        key = self.create_master_key(mnemonic)
+        self.keyBox.insert('1.0', key)
 
     def user_provided_mnemonic(self):
-        mnemonic = self.mnemonicBox.get('1.0')
+        mnemonic = self.mnemonicBox.get('1.0', tk.END)
+        print(type(mnemonic))
         key = self.create_master_key(mnemonic)
         self.keyBox.delete('1.0', tk.END)
         self.keyBox.insert('1.0', key)
 
     def create_buttons(self):
-        self.entropyButton = tk.Button(self.win1, text = 'click for entropy', command = self.user_provided_entropy) #add command from hash class
-        self.generateButton = tk.Button(self.win1, text = 'create mnemonic phrase', command = self.user_provided_mnemonic) #add create_word_list function
+        self.entropyButton = tk.Button(self.win1, text = 'create mnemonic phrase', command = self.user_provided_entropy) #add command from hash class
+        self.generateButton = tk.Button(self.win1, text = 'create bitcoin address', command = self.user_provided_mnemonic) #add create_word_list function
 
 
     def main_window(self):
@@ -90,6 +95,7 @@ class Display(HashingFunctions):
     def window_elements(self):
         self.mnemonicLabel.grid(row=0, column=1, columnspan=2)
         self.mnemonicBox.grid(column=1, columnspan=2, row=1, padx=10, pady=10)
+        self.keyBox.grid(column=1, columnspan=2, row=1, padx=10, pady=10)
         self.entropyButton.grid(column=1, row=2)
         self.generateButton.grid(column =2, row = 2)
         self.keyLabel.grid(column=1, columnspan=2, row=3)
