@@ -27,5 +27,5 @@ An implementation of BIP 39
  
  ## The following Python Libraries were used in this program
  * HashLib
- * Math
+ * Random
  * Tkinter
