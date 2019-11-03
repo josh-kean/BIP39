@@ -29,3 +29,11 @@ An implementation of BIP 39
  * HashLib
  * Random
  * Tkinter
+## Do not use the private keys shown in the screen shots below. Any funds sent to them will not be secure !!!!!
+
+![Optional Text](./screenshots/phrase1.png)
+#### example 1
+
+
+![Optional Text](./screenshots/phrase2.png)
+#### example 2
