@@ -1,5 +1,5 @@
 # BIP39
-An implimentation of BIP 39
+An implementation of BIP 39
 ## Warning, this is a work in progress. Mnemonic Phrases and Private keys are in no way guarenteed to be secure. Do not use this tool to store or transfer any cryptocurrencies of any value!!!
 
 ## This project does the following 
