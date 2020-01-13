@@ -18,9 +18,23 @@ class HashingFunctions:
         self.passphrase = 'TREZOR'
         self.check_sum = None
     
+    def create_binary_ent(self):
+        b = len(self.entropy)*4
+        if b <= 128:
+            self.entropy_bin = format(int(self.entropy, 16), "0128b")
+        elif b <= 160:
+            self.entropy_bin = format(int(self.entropy, 16), "0160b")
+        elif b <= 192:
+            self.entropy_bin = format(int(self.entropy, 16), "0192b")
+        elif b <= 224:
+            self.entropy_bin = format(int(self.entropy, 16), "0224b")
+        elif b <= 256:
+            self.entropy_bin = format(int(self.entropy, 16), "0256b")
+
     def get_input(self, user_input):
         self.entropy = user_input
-        self.entropy_bin = format(int(self.entropy,16), "0128b") #converts user input to a binary number
+        #need cases to ensure binary is 128, 160, 192, 224, or 256 bits long
+        self.create_binary_ent()
 
     #checksum is created by taking the first len(ent) (in this case 256 bits)/32 bits of sha256 of entropy
     def create_check_sum(self):
@@ -31,10 +45,10 @@ class HashingFunctions:
     def create_word_list(self):
         ent_and_chk = f'{self.entropy_bin}{self.check_sum}'
         list_length = len(ent_and_chk)//11
-        self.result_word_list = [self.word_list[int(ent_and_chk[11*x:11*(x+1)],2)]+' ' for x in range(list_length)]
+        self.result_word_list = ' '.join([self.word_list[int(ent_and_chk[11*x:11*(x+1)],2)] for x in range(list_length)])
 
     def create_binary_seed(self):
-        word_list = ''.join(self.result_word_list)
+        word_list = self.result_word_list
         self.binary_seed = hsh.pbkdf2_hmac('sha512', str.encode(word_list), str.encode('mnemonic'+self.passphrase), 2048).hex()
 
     def master_key(self):
