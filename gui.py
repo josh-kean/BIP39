@@ -1,3 +1,6 @@
+from main import HashingFunctions
+import tkinter as tk
+import random as rand
 
 class Display:
     #make a GUI with the following elements
@@ -9,7 +12,7 @@ class Display:
     #   2. one button to generate mnemonic phrase and key
     #Bottom right will have a display showing master key
     def __init__(self):
-        self.hashing_functions = HashingFunctions()
+        self.h = HashingFunctions()
         self.win1 = tk.Tk()
         self.win1.wm_title('Mnemonic Phrase Generator')
         self.win1.resizable(width=False, height=False)
@@ -17,29 +20,43 @@ class Display:
         self.mnemonicBox = tk.Text(self.win1, height=5)
         self.keyLabel = tk.Label(self.win1, text = 'private_key')
         self.keyBox = tk.Text(self.win1, height=5)
-        pass
+        self.numWords = tk.StringVar()
 
     def user_provided_entropy(self):
-        ent = rand.randrange(1,10**256-1)
-        self.hashing_functions.entropy = str(ent)
-        check_sum = self.hashing_functions.check_sum()
-        mnemonic = self.create_word_list()
-        mnemonic = ' '.join()
+        #user can decide how many words they want in their phrase
+        #self.numWords = self.wordOptions.get()
+        size = {'12': 128, '15': '160', '18': '192', '21':'224', '24': '256'}
+        length = size[self.numWords.get()]
+        ent = format(rand.randrange(1,2**int(length)), 'x')
+        #bin_ent = format(ent, f'0{length}b')
+        self.h.get_input(ent)
+        self.h.create_check_sum()
+        self.h.create_word_list()
+        mnemonic = self.h.result_word_list
         self.keyBox.delete('1.0', tk.END)
         self.mnemonicBox.delete('1.0', tk.END)
         self.mnemonicBox.insert('1.0', mnemonic)
         mnemonic = self.mnemonicBox.get('1.0', tk.END)
-        key = self.create_master_key(mnemonic)
+        self.h.create_binary_seed()
+        key = self.h.binary_seed[:len(self.h.binary_seed)//2]
         self.keyBox.insert('1.0', key)
 
     def user_provided_mnemonic(self):
         mnemonic = self.mnemonicBox.get('1.0', tk.END)
-        print(type(mnemonic))
-        key = self.create_master_key(mnemonic)
+        key = HashingFunctions(None, mnemonic)
+        key.create_binary_seed()
+        result_key = key.binary_seed[:len(key.binary_seed)//2]
         self.keyBox.delete('1.0', tk.END)
-        self.keyBox.insert('1.0', key)
+        self.keyBox.insert('1.0', result_key)
+
+    def create_dropdown(self):
+        optionList = (12, 15, 18, 21, 24)
+        self.numWords.set(optionList[0])
+        self.wordOptions = tk.OptionMenu(self.win1, self.numWords, *optionList)
+
 
     def create_buttons(self):
+        self.create_dropdown()
         self.entropyButton = tk.Button(self.win1, text = 'create mnemonic phrase', command = self.user_provided_entropy) #add command from hash class
         self.generateButton = tk.Button(self.win1, text = 'create bitcoin address', command = self.user_provided_mnemonic) #add create_word_list function
 
@@ -49,11 +66,12 @@ class Display:
         self.entry = tk.Entry(self.win1, bd=5)
 
     def window_elements(self):
-        self.mnemonicLabel.grid(row=0, column=1, columnspan=2)
-        self.mnemonicBox.grid(column=1, columnspan=2, row=1, padx=10, pady=10)
-        self.keyBox.grid(column=1, columnspan=2, row=1, padx=10, pady=10)
+        self.mnemonicLabel.grid(row=0, column=1, columnspan=3)
+        self.mnemonicBox.grid(column=1, columnspan=3, row=1, padx=10, pady=10)
+        self.keyBox.grid(column=1, columnspan=3, row=1, padx=10, pady=10)
         self.entropyButton.grid(column=1, row=2)
         self.generateButton.grid(column =2, row = 2)
+        self.wordOptions.grid(column=3, row=2)
         self.keyLabel.grid(column=1, columnspan=2, row=3)
         self.keyBox.grid(column=1, columnspan=2, row=4)
 

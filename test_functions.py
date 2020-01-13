@@ -1,6 +1,10 @@
 import pytest
 from main import HashingFunctions
 
+'''tests labeled as "test_#" test the conversion of entropy to a mnemonic phrase
+    tests labeled as "test_hash_#" test the conversion of a mnemonic phrase to a 512 bit binary seed
+    '''
+
 def ent_to_phrase(entropy): 
     #tests to see if provided entropy produces desired word list
     hashes = HashingFunctions()
