@@ -18,7 +18,7 @@ class Display:
         self.win1.resizable(width=False, height=False)
         self.mnemonicLabel = tk.Label(self.win1, text = 'Mnemonic Phrase')
         self.mnemonicBox = tk.Text(self.win1, height=5)
-        self.keyLabel = tk.Label(self.win1, text = 'private_key')
+        self.keyLabel = tk.Label(self.win1, text = 'binary seed')
         self.keyBox = tk.Text(self.win1, height=5)
         self.numWords = tk.StringVar()
 
@@ -35,17 +35,17 @@ class Display:
         mnemonic = self.h.result_word_list
         self.keyBox.delete('1.0', tk.END)
         self.mnemonicBox.delete('1.0', tk.END)
-        self.mnemonicBox.insert('1.0', mnemonic)
+        self.mnemonicBox.insert('1.0', mnemonic.rstrip())
         mnemonic = self.mnemonicBox.get('1.0', tk.END)
         self.h.create_binary_seed()
-        key = self.h.binary_seed[:len(self.h.binary_seed)//2]
+        key = self.h.binary_seed
         self.keyBox.insert('1.0', key)
 
     def user_provided_mnemonic(self):
-        mnemonic = self.mnemonicBox.get('1.0', tk.END)
-        key = HashingFunctions(None, mnemonic)
+        mnemonic = self.mnemonicBox.get('0.0', tk.END)
+        key = HashingFunctions(None, mnemonic.rstrip())
         key.create_binary_seed()
-        result_key = key.binary_seed[:len(key.binary_seed)//2]
+        result_key = key.binary_seed
         self.keyBox.delete('1.0', tk.END)
         self.keyBox.insert('1.0', result_key)
 
@@ -58,7 +58,7 @@ class Display:
     def create_buttons(self):
         self.create_dropdown()
         self.entropyButton = tk.Button(self.win1, text = 'create mnemonic phrase', command = self.user_provided_entropy) #add command from hash class
-        self.generateButton = tk.Button(self.win1, text = 'create bitcoin address', command = self.user_provided_mnemonic) #add create_word_list function
+        self.generateButton = tk.Button(self.win1, text = 'create binary seed', command = self.user_provided_mnemonic) #add create_word_list function
 
 
     def main_window(self):

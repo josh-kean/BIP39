@@ -44,25 +44,15 @@ class HashingFunctions:
 
     def create_word_list(self):
         ent_and_chk = f'{self.entropy_bin}{self.check_sum}'
-        list_length = len(ent_and_chk)//11
-        self.result_word_list = ' '.join([self.word_list[int(ent_and_chk[11*x:11*(x+1)],2)] for x in range(list_length)])
+        self.result_word_list = ' '.join([self.word_list[int(ent_and_chk[11*x:11*(x+1)],2)] for x in range(len(ent_and_chk)//11
+)])
 
     def create_binary_seed(self):
-        word_list = self.result_word_list
-        self.binary_seed = hsh.pbkdf2_hmac('sha512', str.encode(word_list), str.encode('mnemonic'+self.passphrase), 2048).hex()
+        self.binary_seed = hsh.pbkdf2_hmac('sha512', str.encode(self.result_word_list), str.encode('mnemonic'+self.passphrase), 2048).hex()
 
     def master_key(self):
         entropy = self.get_input()
-        entropy = self.create_entropy()
         chk_sum = self.check_sum()
         word_list = self.create_word_list()
         master_k = self.create_master_key()
 
-
-if __name__ == '__main__':
-    test1 = HashingFunctions('00000000000000000000000000000000')
-    test1.create_check_sum()
-    test1.create_word_list()
-    test1.create_binary_seed()
-    print(test1.result_word_list)
-    print(test1.binary_seed)
