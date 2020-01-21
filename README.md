@@ -1,10 +1,10 @@
 # BIP39
 An implementation of BIP 39
-## Warning, this is a work in progress. Mnemonic Phrases and Private keys are in no way guarenteed to be secure. Do not use this tool to store or transfer any cryptocurrencies of any value!!!
+## Warning, use this product at your own risk. Mnemonic Phrases and Binary Seed are in no way guarenteed to be secure. Do not use this tool to store or transfer any cryptocurrencies of any value!!!
 
 ## This project does the following 
 * Create a Mnemonic Phrase to generate a Bitcoin Address
-* Receives a user-input mnemonic phrase to generate a Bitcoin Address
+* Receives a user-input mnemonic phrase to generate a 512 bit binary seed
 * Provide a GUI for users to bypass the terminal when using these functions
 
 ## The Hashing Functions are split into the following steps
@@ -21,7 +21,7 @@ An implementation of BIP 39
  ## The GUI functions create an interface with the following elements
  * A box that displays a mnemonic phrase. A user can also paste their own phrase into the box
  * A button that creates entropy. Rite now it uses Python's random library, but eventually I want to tie the user_input function into this button
-  * This button also creates a word list to display to the mnemonic phrase box, and a private key
+  * This button also creates a word list to display to the mnemonic phrase box, and a 512 bit binary seed
  * A field to display a private key generated from a word list
  * A button to create a private key from a word list
  
@@ -31,9 +31,17 @@ An implementation of BIP 39
  * Tkinter
 ## Do not use the private keys shown in the screen shots below. Any funds sent to them will not be secure !!!!!
 
-![Optional Text](./screenshots/phrase1.png)
+![Optional Text](./screenshots/shot1.png)
 #### example 1
 
 
-![Optional Text](./screenshots/phrase2.png)
+![Optional Text](./screenshots/shot2.png)
 #### example 2
+
+
+![Optional Text](./screenshots/shot3.png)
+#### example 3
+
+
+![Optional Text](./screenshots/shot4.png)
+#### example 4
